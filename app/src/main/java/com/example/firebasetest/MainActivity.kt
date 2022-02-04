@@ -14,12 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       /* val database = Firebase.database("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-        val myRef = database.getReference("message")
+        /*var
 
-        myRef.setValue("Hello, World!")*/
-
-        auth = Firebase.auth
+        var fragmentManager = supportFragmentManager.beginTransaction()
+        fragmentManager.add()*/
     }
 
     override fun onStart() {

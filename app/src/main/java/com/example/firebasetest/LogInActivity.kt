@@ -27,29 +27,15 @@ class LogInActivity : AppCompatActivity() {
         binding.btnLogIn.setOnClickListener{
             // Проверка email адреса на соответствие паттерну
             var email = binding.emailInput.text.toString()
-            val emailRegexPattern = Regex("[\\w~!@#$%^&*+-]+@[a-z]+\\.[a-z]{2,}")
-            var emailCheck = emailRegexPattern.matches(email)
-            // Проверка пароля на соответствие паттерну
             var password = binding.passwordInput.text.toString()
-            val passwordRegexPattern = Regex("[\\w~!@#$%^&*+-]+")
-            var passwordCheck = passwordRegexPattern.matches(password)
-            if (emailCheck && passwordCheck){
-                // Sign in
-                auth = Firebase.auth
-                logIn(email, password)
-            } else {
-                Toast
-                    .makeText(this, "Email or password is invalid!", Toast.LENGTH_SHORT)
-                    .show()
-            }
+
+            auth = Firebase.auth
+            logIn(email, password)
         }
 
         binding.btnSignIn.setOnClickListener{
-            var signInFragment = RegistrationFragment()
-
-            var fragmentManager = supportFragmentManager.beginTransaction()
-            fragmentManager.replace(R.id.fragment_container, signInFragment)
-            fragmentManager.commit()
+            var intent = Intent(this, RegistrationActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -65,7 +51,7 @@ class LogInActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.makeText(this, "Authentication failed. Check email or password!",
                         Toast.LENGTH_SHORT).show()
                     //updateUI(null)
                 }
