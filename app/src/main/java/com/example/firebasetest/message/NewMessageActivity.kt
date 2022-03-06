@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import com.anshdeep.kotlinmessenger.messages.ChatLogActivity
 import com.example.firebasetest.R
 import com.example.firebasetest.models.User
 import com.example.firebasetest.views.BigImageDialog

@@ -11,6 +11,8 @@ import com.example.firebasetest.models.User
 import com.example.firebasetest.utils.DateUtils.getFormattedTimeChatLog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.firebasetest.message.LatestMessagesActivity
+import com.example.firebasetest.message.NewMessageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
@@ -29,7 +31,7 @@ class ChatLogActivity : AppCompatActivity() {
     val adapter = GroupAdapter<ViewHolder>()
 
     // Bundle Data
-    private val toUser: User
+    private val toUser: User?
         get() = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         recyclerview_chat_log.adapter = adapter
 
-        supportActionBar?.title = toUser.name
+        supportActionBar?.title = toUser!!.name
 
         listenForMessages()
 
@@ -54,7 +56,7 @@ class ChatLogActivity : AppCompatActivity() {
         swiperefresh.isRefreshing = true
 
         val fromId = FirebaseAuth.getInstance().uid ?: return
-        val toId = toUser.uid
+        val toId = toUser!!.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -87,7 +89,7 @@ class ChatLogActivity : AppCompatActivity() {
                         val currentUser = LatestMessagesActivity.currentUser ?: return
                         adapter.add(ChatFromItem(it.text, currentUser, it.timestamp))
                     } else {
-                        adapter.add(ChatToItem(it.text, toUser, it.timestamp))
+                        adapter.add(ChatToItem(it.text, toUser!!, it.timestamp))
                     }
                 }
                 recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
@@ -110,7 +112,7 @@ class ChatLogActivity : AppCompatActivity() {
         }
 
         val fromId = FirebaseAuth.getInstance().uid ?: return
-        val toId = toUser.uid
+        val toId = toUser!!.uid
 
         val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
         val toReference = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()

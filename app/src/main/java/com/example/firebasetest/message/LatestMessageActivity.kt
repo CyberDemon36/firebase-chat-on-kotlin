@@ -8,9 +8,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.anshdeep.kotlinmessenger.messages.ChatLogActivity
 import com.anshdeep.kotlinmessenger.views.LatestMessageRow
 import com.example.firebasetest.RegistrationActivity
 import com.example.firebasetest.databinding.ActivityLatestMessagesBinding
+import com.example.firebasetest.message.NewMessageActivity.Companion.USER_KEY
 import com.example.firebasetest.models.ChatMessage
 import com.example.firebasetest.models.User
 import com.google.firebase.auth.FirebaseAuth
