@@ -4,42 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center">
-    <TextView
-        android:id="@+id/email_label"
-        android:layout_width="wrap_content"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="100dp">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/black"
+        android:id="@+id/avatar_imageview"
+        android:layout_marginTop="15dp"
+        />
+    <Button
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="@string/email_label"
-        android:textSize="19sp" />
+        android:layout_marginBottom="20dp"
+        android:text="select photo"
+        android:id="@+id/btn_avatar_selecter"/>
+
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/email_registration_input" />
-    <TextView
-        android:id="@+id/password_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password_label"
-        android:textSize="19sp" />
+        android:id="@+id/nickname_registration_input"
+        android:inputType="textEmailAddress"
+        android:hint="Enter nickname"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/password_registration_input"/>
-    <TextView
-        android:id="@+id/repeat_password_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/repeat_password_label"
-        android:textSize="19sp" />
+        android:id="@+id/email_registration_input"
+        android:inputType="textEmailAddress"
+        android:hint="Enter your email"/>
+
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/repeat_password_registration_input"/>
+        android:id="@+id/password_registration_input"
+        android:hint="Enter your password"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeat_password_registration_input"
+        android:hint="Repeat password"
+        android:inputType="textPassword"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_margin="60dp"
         android:id="@+id/btn_sign_in"
         android:text="@string/registration_btn"
         />

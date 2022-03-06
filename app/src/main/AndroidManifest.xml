@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseTest">
         <activity
+            android:name=".message.NewMessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogInActivity"
             android:exported="true">
             <intent-filter>
@@ -28,10 +31,8 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".RegistrationActivity"
-        android:exported="true">
-
-    </activity>
+            android:name=".RegistrationActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

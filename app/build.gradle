@@ -3,6 +3,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id  'kotlin-android-extensions'
 }
 
 android {
@@ -46,6 +47,19 @@ dependencies {
     // Declare the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-database-ktx'
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    // The dependency for the Cloud Firestore library
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    // Firebase storage
+    implementation 'com.google.firebase:firebase-storage'
+    // Groupie - for complex recycler views
+    implementation "com.xwray:groupie:2.1.0"
+    // Glide
+    implementation "com.github.bumptech.glide:glide:4.8.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.8.0"
+    // Circle Image View
+    implementation "de.hdodenhof:circleimageview:2.2.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
