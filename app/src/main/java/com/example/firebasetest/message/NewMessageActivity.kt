@@ -1,4 +1,4 @@
-package com.anshdeep.kotlinmessenger.messages
+package com.example.firebasetest.message
 
 import android.app.Activity
 import android.content.Context

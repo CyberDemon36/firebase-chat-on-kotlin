@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseTest">
         <activity
+            android:name=".message.ChatLogActivity"
+            android:exported="false" />
+        <activity
             android:name=".message.NewMessageActivity"
             android:exported="false" />
         <activity
@@ -32,7 +35,7 @@
         </activity>
         <activity
             android:name=".RegistrationActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
