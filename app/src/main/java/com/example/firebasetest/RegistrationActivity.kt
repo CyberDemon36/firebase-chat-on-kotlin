@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.firebasetest.databinding.RegistrationActivityLayoutBinding
+import com.example.firebasetest.message.LatestMessagesActivity
 import com.example.firebasetest.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -105,7 +106,7 @@ class RegistrationActivity: AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.makeText(baseContext, "Registration failed.",
                         Toast.LENGTH_SHORT).show()
                 }
             }
@@ -121,7 +122,6 @@ class RegistrationActivity: AppCompatActivity() {
             ref.putFile(selectedPhotoUri!!)
                 .addOnSuccessListener {
                     Log.d(TAG, "Successfully uploaded image: ${it.metadata?.path}")
-                    @Suppress("NestedLambdaShadowedImplicitParameter")
                     ref.downloadUrl.addOnSuccessListener {
                         Log.d(TAG, "File Location: $it")
                         saveUserToFirebaseDatabase(it.toString())
@@ -153,7 +153,7 @@ class RegistrationActivity: AppCompatActivity() {
             .addOnSuccessListener {
                 Log.d(TAG, "Finally we saved the user to Firebase Database")
 
-                //val intent = Intent(this, LatestMessagesActivity::class.java)
+                val intent = Intent(this, LatestMessagesActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 //overridePendingTransition(R.anim.enter, R.anim.exit)

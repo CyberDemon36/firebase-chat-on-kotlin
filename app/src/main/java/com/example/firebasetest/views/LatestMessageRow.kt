@@ -1,4 +1,4 @@
-package com.anshdeep.kotlinmessenger.views
+package com.example.firebasetest.views
 
 import android.app.Activity
 import android.content.Context
@@ -39,7 +39,9 @@ class LatestMessageRow(val chatMessage: ChatMessage, val context: Context) : Ite
             chatPartnerId = chatMessage.fromId
         }
 
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerId")
+        val ref = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/users/$chatPartnerId")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
 

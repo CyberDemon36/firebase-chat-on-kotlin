@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import com.anshdeep.kotlinmessenger.messages.ChatLogActivity
+import com.example.firebasetest.message.ChatLogActivity
 import com.example.firebasetest.R
 import com.example.firebasetest.models.User
 import com.example.firebasetest.views.BigImageDialog
@@ -50,7 +50,9 @@ class NewMessageActivity : AppCompatActivity() {
     private fun fetchUsers() {
         swiperefresh.isRefreshing = true
 
-        val ref = FirebaseDatabase.getInstance().getReference("/users")
+        val ref = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
 

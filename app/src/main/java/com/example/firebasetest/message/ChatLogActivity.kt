@@ -1,4 +1,4 @@
-package com.anshdeep.kotlinmessenger.messages
+package com.example.firebasetest.message
 
 import android.os.Bundle
 import android.util.Log
@@ -27,11 +27,12 @@ class ChatLogActivity : AppCompatActivity() {
     companion object {
         val TAG = ChatLogActivity::class.java.simpleName
     }
+    private var lastItemView: Int = 0
 
     val adapter = GroupAdapter<ViewHolder>()
 
     // Bundle Data
-    private val toUser: User?
+    private val  toUser: User?
         get() = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +58,9 @@ class ChatLogActivity : AppCompatActivity() {
 
         val fromId = FirebaseAuth.getInstance().uid ?: return
         val toId = toUser!!.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+        val ref = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/user-messages/$fromId/$toId")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
@@ -92,7 +95,8 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.add(ChatToItem(it.text, toUser!!, it.timestamp))
                     }
                 }
-                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
+                lastItemView = returnViewGroupCount()
+                recyclerview_chat_log.scrollToPosition(lastItemView)
                 swiperefresh.isRefreshing = false
                 swiperefresh.isEnabled = false
             }
@@ -103,7 +107,14 @@ class ChatLogActivity : AppCompatActivity() {
         })
 
     }
+    private fun returnViewGroupCount(): Int{
+        if (adapter.itemCount <= 1){
+            return adapter.itemCount
+        } else {
+            return adapter.itemCount - 1
+        }
 
+    }
     private fun performSendMessage() {
         val text = edittext_chat_log.text.toString()
         if (text.isEmpty()) {
@@ -114,24 +125,33 @@ class ChatLogActivity : AppCompatActivity() {
         val fromId = FirebaseAuth.getInstance().uid ?: return
         val toId = toUser!!.uid
 
-        val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
-        val toReference = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
+        val reference = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/user-messages/$fromId/$toId").push()
+        val toReference = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/user-messages/$toId/$fromId").push()
 
         val chatMessage = ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
                 edittext_chat_log.text.clear()
-                recyclerview_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
+                lastItemView = returnViewGroupCount()
+                recyclerview_chat_log.smoothScrollToPosition(lastItemView)
             }
 
         toReference.setValue(chatMessage)
 
 
-        val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+        val latestMessageRef = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/latest-messages/$fromId/$toId")
         latestMessageRef.setValue(chatMessage)
 
-        val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+        val latestMessageToRef = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessage)
     }
 

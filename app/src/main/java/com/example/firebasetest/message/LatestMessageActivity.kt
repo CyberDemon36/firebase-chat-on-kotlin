@@ -8,8 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.anshdeep.kotlinmessenger.messages.ChatLogActivity
-import com.anshdeep.kotlinmessenger.views.LatestMessageRow
+import com.example.firebasetest.message.ChatLogActivity
+import com.example.firebasetest.views.LatestMessageRow
 import com.example.firebasetest.RegistrationActivity
 import com.example.firebasetest.databinding.ActivityLatestMessagesBinding
 import com.example.firebasetest.message.NewMessageActivity.Companion.USER_KEY
@@ -77,7 +77,9 @@ class LatestMessagesActivity : AppCompatActivity() {
     private fun listenForLatestMessages() {
         binding.swiperefresh.isRefreshing = true
         val fromId = FirebaseAuth.getInstance().uid ?: return
-        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
+        val ref = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/latest-messages/$fromId")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
@@ -124,7 +126,9 @@ class LatestMessagesActivity : AppCompatActivity() {
 
     private fun fetchCurrentUser() {
         val uid = FirebaseAuth.getInstance().uid ?: return
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val ref = FirebaseDatabase
+            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
             }
