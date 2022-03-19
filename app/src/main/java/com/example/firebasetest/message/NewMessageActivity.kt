@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.widget.SearchView
 import com.example.firebasetest.message.ChatLogActivity
 import com.example.firebasetest.R
 import com.example.firebasetest.models.User
@@ -25,6 +27,11 @@ import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
 class NewMessageActivity : AppCompatActivity() {
+    private val adapter = GroupAdapter<ViewHolder>()
+
+    private val ref = FirebaseDatabase
+        .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+        .getReference("/users")
 
     companion object {
         const val USER_KEY = "USER_KEY"
@@ -39,34 +46,40 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Select User"
 
-        fetchUsers()
+        fetchUsers("")
         //Todo - Add more users and messages for screenshots
 
         swiperefresh.setOnRefreshListener {
-            fetchUsers()
+            fetchUsers("")
         }
     }
 
-    private fun fetchUsers() {
+    private fun fetchUsers(filterOption: String) {
         swiperefresh.isRefreshing = true
 
-        val ref = FirebaseDatabase
-            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-            .getReference("/users")
+
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val adapter = GroupAdapter<ViewHolder>()
+                adapter.clear()
 
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
-                    @Suppress("NestedLambdaShadowedImplicitParameter")
-                    it.getValue(User::class.java)?.let {
-                        if (it.uid != FirebaseAuth.getInstance().uid) {
-                            adapter.add(UserItem(it, this@NewMessageActivity))
+                    if (filterOption.isNotEmpty()) {
+                        it.getValue(User::class.java)?.let {
+                            val userFilter = Regex("$filterOption.*")
+                            if (it.uid != FirebaseAuth.getInstance().uid && userFilter.matches(it.name)) {
+                                adapter.add(UserItem(it, this@NewMessageActivity))
+                            }
+                        }
+                    } else {
+                        it.getValue(User::class.java)?.let {
+                            if (it.uid != FirebaseAuth.getInstance().uid) {
+                                adapter.add(UserItem(it, this@NewMessageActivity))
+                            }
                         }
                     }
                 }
@@ -84,6 +97,26 @@ class NewMessageActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_bar_menu, menu)
+
+        val search = menu?.findItem(R.id.nav_search)
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = "Search users"
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                fetchUsers(p0!!)
+                return true
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 }
 
