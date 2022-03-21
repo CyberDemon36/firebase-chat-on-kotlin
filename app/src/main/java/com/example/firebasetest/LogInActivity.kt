@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.example.firebasetest.databinding.LogInActivityBinding
 import com.example.firebasetest.message.LatestMessagesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlin.math.sign
 
 class LogInActivity : AppCompatActivity() {
     lateinit var binding: LogInActivityBinding
