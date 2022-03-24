@@ -38,7 +38,7 @@ class LatestMessagesActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         vm = ViewModelProvider(this).get(LatestMessageViewModel::class.java)
-        vm.liveDataLatestMessagesMap.observe(this, Observer {
+        vm.latestMessagesMap.observe(this, Observer {
             adapter.clear()
             it.values.forEach {
                 adapter.add(LatestMessageRow(it, this))
