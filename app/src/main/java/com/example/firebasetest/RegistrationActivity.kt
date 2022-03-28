@@ -118,7 +118,9 @@ class RegistrationActivity: AppCompatActivity() {
             saveUserToFirebaseDatabase(null)
         } else {
             val filename = UUID.randomUUID().toString()
-            val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+            val ref = FirebaseStorage
+                .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("/images/$filename")
             ref.putFile(selectedPhotoUri!!)
                 .addOnSuccessListener {
                     Log.d(TAG, "Successfully uploaded image: ${it.metadata?.path}")
@@ -129,8 +131,6 @@ class RegistrationActivity: AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     Log.d(TAG, "Failed to upload image to storage: ${it.message}")
-                    /*loading_view.visibility = View.GONE
-                    already_have_account_text_view.visibility = View.VISIBLE*/
                 }
         }
     }
@@ -156,12 +156,10 @@ class RegistrationActivity: AppCompatActivity() {
                 val intent = Intent(this, LatestMessagesActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
-                //overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to set value to database: ${it.message}")
-                /*loading_view.visibility = View.GONE
-                already_have_account_text_view.visibility = View.VISIBLE*/
+
             }
 
     }

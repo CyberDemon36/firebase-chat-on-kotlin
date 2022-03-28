@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.firebasetest.R
 import com.example.firebasetest.models.ChatMessage
 import com.example.firebasetest.models.User
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.firebasetest.message.LatestMessagesActivity
 import com.example.firebasetest.message.NewMessageActivity
+import com.example.firebasetest.representation.ChatLogViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
@@ -28,6 +31,7 @@ class ChatLogActivity : AppCompatActivity() {
         val TAG = ChatLogActivity::class.java.simpleName
     }
     private var lastItemView: Int = 0
+    lateinit var vm: ChatLogViewModel
 
     val adapter = GroupAdapter<ViewHolder>()
 
@@ -38,6 +42,8 @@ class ChatLogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
+
+        vm = ViewModelProvider(this).get(ChatLogViewModel::class.java)
 
         swiperefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
 
@@ -125,34 +131,23 @@ class ChatLogActivity : AppCompatActivity() {
         val fromId = FirebaseAuth.getInstance().uid ?: return
         val toId = toUser!!.uid
 
-        val reference = FirebaseDatabase
-            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-            .getReference("/user-messages/$fromId/$toId").push()
-        val toReference = FirebaseDatabase
-            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-            .getReference("/user-messages/$toId/$fromId").push()
+        val senderReference = vm.customiseSenderReference(fromId, toId)
+        val receiverReference = vm.customiseReceiverReference(fromId, toId)
 
-        val chatMessage = ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
-        reference.setValue(chatMessage)
+        val chatMessage = ChatMessage(senderReference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
+        senderReference.setValue(chatMessage)
             .addOnSuccessListener {
-                Log.d(TAG, "Saved our chat message: ${reference.key}")
+                Log.d(TAG, "Saved our chat message: ${senderReference.key}")
                 edittext_chat_log.text.clear()
                 lastItemView = returnViewGroupCount()
                 recyclerview_chat_log.smoothScrollToPosition(lastItemView)
             }
 
-        toReference.setValue(chatMessage)
+        receiverReference.setValue(chatMessage)
 
 
-        val latestMessageRef = FirebaseDatabase
-            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-            .getReference("/latest-messages/$fromId/$toId")
-        latestMessageRef.setValue(chatMessage)
-
-        val latestMessageToRef = FirebaseDatabase
-            .getInstance("https://fir-test-9d07c-default-rtdb.europe-west1.firebasedatabase.app")
-            .getReference("/latest-messages/$toId/$fromId")
-        latestMessageToRef.setValue(chatMessage)
+        vm.customiseLastSenderMessageReference(fromId, toId).setValue(chatMessage)
+        vm.customiseLastReceiverMessageReference(fromId, toId).setValue(chatMessage)
     }
 
 }

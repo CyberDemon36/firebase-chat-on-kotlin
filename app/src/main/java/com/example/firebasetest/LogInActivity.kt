@@ -39,22 +39,17 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun logIn(email: String, password: String) {
-        // [START sign_in_with_email]
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     var intent = Intent(this, LatestMessagesActivity::class.java)
                     startActivity(intent)
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(this, "Authentication failed. Check email or password!",
                         Toast.LENGTH_SHORT).show()
-                    //updateUI(null)
                 }
             }
-        // [END sign_in_with_email]
     }
 }
