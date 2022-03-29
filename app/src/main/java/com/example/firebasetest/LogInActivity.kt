@@ -13,8 +13,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class LogInActivity : AppCompatActivity() {
-    lateinit var binding: LogInActivityBinding
-    lateinit var auth: FirebaseAuth
+    private lateinit var binding: LogInActivityBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,15 +25,15 @@ class LogInActivity : AppCompatActivity() {
         super.onStart()
         binding.btnLogIn.setOnClickListener{
             // Проверка email адреса на соответствие паттерну
-            var email = binding.emailInput.text.toString()
-            var password = binding.passwordInput.text.toString()
+            val email = binding.emailInput.text.toString()
+            val password = binding.passwordInput.text.toString()
 
             auth = Firebase.auth
             logIn(email, password)
         }
 
         binding.btnSignIn.setOnClickListener{
-            var intent = Intent(this, RegistrationActivity::class.java)
+            val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
         }
     }
@@ -43,7 +43,8 @@ class LogInActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    var intent = Intent(this, LatestMessagesActivity::class.java)
+                    val intent = Intent(this, LatestMessagesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
